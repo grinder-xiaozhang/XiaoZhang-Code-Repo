@@ -1,0 +1,319 @@
+左电机：PD4,5
+右电机：PD6,7
+左电机PWM：PA2
+右电机PWM：PA15
+oled：SCL:PD0,DIN:PD1
+左测脉冲：PA0，PA1
+右测脉冲：PA6，PA7
+串口1：PA9TX和PA10RX，陀螺仪
+串口3：PB10TX和PB11RX，k210
+寻迹：PD10,11,12,13,14
+按键：PC4，PE2，3，5
+PC2蜂鸣器
+PB13 PB14LED
+
+//灯，蜂鸣器提示
+void task(void)
+{
+	// 如果mode1为0
+	if(mode1==0)
+	{
+		// 左右轮速度设置为50
+		left=150;right=150;
+		// 如果距离大于10
+		if(distance>73)
+		{
+			angle_PID(50,50,89);
+				if(distance>120)
+				{
+				LED0=1;
+				BEEP=1;
+				delay_ms(300);
+				LED0=0;
+				BEEP=0;
+				delay_ms(300);
+				left=0;right=0;	
+				mode1=1;
+					
+				}
+			
+		}
+		// 调用PID函数
+		increment_PID(left,right);
+	}
+	// 如果mode1为1
+	else if(mode1==1)
+	{
+			angle_PID(50,50,-89);
+			// 如果距离大于25
+			if(distance>195)		//155
+			{
+				LED0=1;
+				BEEP=1;
+				delay_ms(300);
+				LED0=0;
+				BEEP=0;
+				delay_ms(300);
+				left=0;right=0;
+				mode1=2;
+
+			}	
+	}
+	else if(mode1==2)
+	{
+	angle_PID(100,100,179);
+	if(distance>310)
+		{
+
+			left=0;right=0;
+			Motor_speed(0,0);
+		}
+	}
+}	
+
+//好的
+void task(void)
+{
+	// 如果mode1为0
+	if(mode1==0)
+	{
+		// 左右轮速度设置为50
+		left=150;right=150;
+		// 如果距离大于10
+		if(distance>73)		//74
+		{
+			angle_PID(50,50,89);
+				if(distance>120)
+				{	
+					left=0;right=0;
+					Motor_speed(0,0);
+					delay_ms(1000);
+					if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)==0)
+					{
+					delay_ms(2000);
+//					left=0;right=0;	
+					mode1=1;					
+					}
+				
+					
+				}
+			
+		}
+		// 调用PID函数
+		increment_PID(left,right);
+	}
+	// 如果mode1为1
+	else if(mode1==1)
+	{
+			angle_PID(50,50,-89);
+			// 如果距离大于25
+			if(distance>205)	//195  	//155
+			{
+				left=0;right=0;
+				mode1=2;
+
+			}	
+	}
+	else if(mode1==2)
+	{
+	angle_PID(100,100,179);
+	if(distance>310)
+		{
+
+			left=0;right=0;
+			Motor_speed(0,0);
+		}
+	}
+}	
+	
+
+//左右轮通用型		近端
+void task(void)
+{
+	// 如果mode1为0
+	if(mode1==0)
+	{
+		// 左右轮速度设置为50
+		left=150;right=150;
+		// 如果距离大于10
+		if(distance>74)
+		{
+			angle_PID(50,50,-89);		左正右负		93
+				if(distance>135)
+				{	
+					left=0;right=0;
+					Motor_speed(0,0);
+					delay_ms(1000);
+					if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)==0)
+					{
+						mode1=1;
+					}
+				}
+			
+		}
+		// 调用PID函数
+		increment_PID(left,right);
+	}
+	// 如果mode1为1
+	else if(mode1==1)
+	{
+			angle_PID(50,50,89);		//左负右正	93
+			// 如果距离大于25
+			if(distance>185)		//155
+			{
+				left=0;right=0;
+				mode1=2;
+
+			}	
+	}
+	else if(mode1==2)
+	{
+	angle_PID(100,100,179);
+	if(distance>270)
+		{
+
+			left=0;right=0;
+			Motor_speed(0,0);
+		}
+	}
+}	
+	
+//					//中端
+void task(void)
+{
+	// 如果mode1为0
+	if(mode1==0)
+	{
+		// 左右轮速度设置为50
+//		angle_PID(200,200,0);
+		left=150; right=150;
+		// 如果距离大于10
+		if(distance>180)
+		{
+			angle_PID(50,50,95);	//93
+				if(distance>245)
+				{	
+					left=0;right=0;
+					Motor_speed(0,0);
+					delay_ms(1000);
+					if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)==0)
+					{
+						mode1=1;
+					}
+				}
+			
+		}
+		// 调用PID函数
+		increment_PID(left,right);
+	}
+	// 如果mode1为1
+	else if(mode1==1)
+	{
+			angle_PID(50,50,-88);		//-91
+			// 如果距离大于25
+			if(distance>290)		//155
+			{
+				left=0;right=0;
+				mode1=2;
+
+			}	
+	}
+	else if(mode1==2)
+	{
+	angle_PID(150,150,-178);		//左负
+	if(distance>470)
+		{
+
+			left=0;right=0;
+			Motor_speed(0,0);
+		}
+	}
+}	
+
+
+
+// 				远端
+void task(void)
+{
+	// 如果mode1为0
+	if(mode1==0)
+	{
+		// 左右轮速度设置为50
+//		angle_PID(200,200,0);
+		left=150; right=150;
+		// 如果距离大于10
+		if(distance>278)
+		{
+			angle_PID(50,50,-90);	//93			转1
+				if(distance>380)
+				{	
+//					angle_PID(50,50,0);
+//					if(distance>460)
+//					{
+//					left=0;right=0;
+//					Motor_speed(0,0);
+//					delay_ms(1000);
+//					}
+					mode1=1;
+					
+				}
+			
+		}
+		// 调用PID函数
+		increment_PID(left,right);
+	}
+	// 如果mode1为1
+	else if(mode1==1)
+	{
+			angle_PID(50,50,179);		//-91		转2
+			// 如果距离大于25
+			if(distance>435)		//155
+			{
+				left=0;right=0;
+				Motor_speed(0,0);
+				delay_ms(1000);
+				if(GPIO_ReadInputDataBit(GPIOE,GPIO_Pin_3)==0)
+					{
+						mode1=2;
+					}
+//				mode1=2;
+
+			}	
+	}
+	else if(mode1==2)
+	{
+	angle_PID(50,50,0);		//左负		转3
+	if(distance>485)
+		{
+
+//			left=0;right=0;
+//				Motor_speed(0,0);
+//				delay_ms(1000);
+			mode1=3;
+		}
+	}
+	else if(mode1==3)
+	{
+	angle_PID(50,50,90);		//左负
+	if(distance>577)
+		{
+
+//			left=0;right=0;
+//				Motor_speed(0,0);
+//				delay_ms(1000);
+			mode1=4;
+		}
+	}
+	else if(mode1==4)
+	{
+	angle_PID(100,100,-179);		//左负
+	if(distance>870)
+		{
+
+			left=0;right=0;
+				Motor_speed(0,0);
+				delay_ms(1000);
+//			mode1=4;
+		}
+	}
+}			

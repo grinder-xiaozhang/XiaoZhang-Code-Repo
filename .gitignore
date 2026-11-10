@@ -1,0 +1,37 @@
+# Keil / embedded build outputs
+OBJ/
+Objects/
+Listings/
+Output/
+Listing/
+build/
+DebugConfig/
+*.o
+*.d
+*.crf
+*.dep
+*.lst
+*.axf
+*.hex
+*.bin
+*.map
+*.htm
+*.bak
+*.tmp
+*.log
+*.scvd
+
+# Local IDE / debugger state
+*.uvguix.*
+*.uvoptx
+JLinkSettings.ini
+JLinkLog.txt
+.vscode/
+.eide/log/
+.eide.usr.ctx.json
+.cache/
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
